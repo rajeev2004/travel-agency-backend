@@ -120,7 +120,7 @@ export async function updatePackage(req,res){
     try{
         const id=req.params.package_id;
         const {name,place,image_url,people,amount,month}=req.body;
-        await db.query("update packages set name=$1,place=$2,image_url=$3,people=$4,amount=$5,month=$6 where id=$7",[name,place,image_url,people,amount,month,id]);
+        await db.query("update packages set place=$1,image_url=$2,people=$3,amount=$4,month=$5 where id=$6",[place,image_url,people,amount,month,id]);
         res.status(200).json({message:'package updated successfully'});
     }catch(err){
         console.error(err.message);
