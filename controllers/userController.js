@@ -185,4 +185,16 @@ export async function postAnswer(req,res){
         res.status(500).json({message:'server error'});
     }
 }
-
+export async function deleteQuestion(req,res){
+    try{
+        const {question_id}=req.params;
+        const result=await db.query('delete from question where id=$1 RETURNING *',[question_id]);
+        if(result.rows.length===0){
+            res.status(404).json({message:'query not found'});
+        }
+        res.status(200).json(result.rows);
+    }catch(err){
+        console.error(err.message);
+        res.status(500).json({message:'server error'});
+    }
+}
