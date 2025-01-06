@@ -129,13 +129,56 @@ export async function updatePackage(req,res){
 }
 export async function bookPackage(req,res){
     try{
-        const[user_id,id,email,startDate,EndDate,people,place,name,image_url,amount]=req.body;
-        const result=await db.query("Insert into bookedpackages (user_id,package_id,people,start_date,end_date,email,place,image_url,name,amount) values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING *",[user_id,id,people,startDate,EndDate,email,place,image_url,name,amount]);
+        const[user_id,id,email,startDate,EndDate,people,place,tripType,image_url,amount]=req.body;
+        const result=await db.query("Insert into bookedpackages (user_id,package_id,people,start_date,end_date,email,place,image_url,name,amount) values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING *",[user_id,id,people,startDate,EndDate,email,place,image_url,tripType,amount]);
+        console.log('Query parameters:', { user_id, id, email, startDate, EndDate, people, place, name, image_url, amount });
         if(result.rows.length>0){
             res.status(201).json(result.rows);
         }else{
             return res.status(400).json({message:'Cannot create the data'});
         }
+    }catch(err){
+        console.error(err.message);
+        res.status(500).json({message:'server error'});
+    }
+}
+export async function getAllQueries(req,res){
+    try{
+        const result=await db.query('select * from answer');
+        const result2=await db.query('select id,question from question');
+        res.status(200).json({answer:result.rows,question:result2.rows});
+    }catch(err){
+        console.error(err.message);
+        res.status(500).json({message:'server.error'});
+    }
+}
+export async function getUserQueries(req,res){
+    try{
+        const {user_id}=req.params;
+        const result=await db.query('select * from answer');
+        const result2=await db.query('select id,question from question where user_id=$1',[user_id]);
+        res.status(200).json({answer:result.rows,question:result2.rows});
+    }catch(err){
+        console.error(err.message);
+        res.status(500).json({message:'server error'});
+    }
+}
+export async function postQuestion(req,res){
+    try{
+        const {message}=req.body;
+        const {user_id}=req.params;
+        const result=await db.query('Insert into question (question,user_id) values($1,$2) RETURNING id,question',[message,user_id]);
+        res.status(201).json(result.rows);
+    }catch(err){
+        console.error(err.message);
+        res.status(500).json({message:'server error'});
+    }
+}
+export async function postAnswer(req,res){
+    try{
+        const {question_id,answer}=req.body;
+        const result=await db.query('Insert into answer (answer,question_id) values($1,$2) RETURNING *'[answer,question_id]);
+        res.status(201).json(result.rows);
     }catch(err){
         console.error(err.message);
         res.status(500).json({message:'server error'});

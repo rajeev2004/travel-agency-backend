@@ -1,5 +1,5 @@
 import express from "express";
-import {getPackages,loginUser,registerUser,viewPackage,deletePackage,getAllPackages,getUserPackage,Search,updatePackage,bookPackage,deleteBookedPackage} from "../controllers/userController.js";
+import {getPackages,loginUser,registerUser,viewPackage,deletePackage,getAllPackages,getUserPackage,Search,updatePackage,bookPackage,deleteBookedPackage,getAllQueries,getUserQueries,postQuestion,postAnswer} from "../controllers/userController.js";
 const router=express.Router();
 router.post('/register',registerUser);
 router.post('/login',loginUser);
@@ -12,4 +12,8 @@ router.get('/getuserpackage/:user_id',getUserPackage);
 router.get('/search',Search);
 router.put('/updatepackage/:package_id',updatePackage);
 router.post('/booking',bookPackage);
+router.get('/getAllQueries',getAllQueries);
+router.get('/getUserQueries/:user_id',getUserQueries);
+router.post('/postQuestion/:user_id',postQuestion);
+router.post('/postAnswer',postAnswer);
 export default router;
