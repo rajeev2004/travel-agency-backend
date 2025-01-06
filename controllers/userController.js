@@ -176,9 +176,10 @@ export async function postQuestion(req,res){
 }
 export async function postAnswer(req,res){
     try{
+        console.log(req.body);
         const {question_id,answer}=req.body;
-        const result=await db.query('Insert into answer (answer,question_id) values($1,$2) RETURNING *'[answer,question_id]);
-        res.status(201).json(result.rows);
+        const result=await db.query('Insert into answer (answer,question_id) values($1,$2) RETURNING *',[answer,question_id]);
+        res.status(201).json(result.rows[0]);
     }catch(err){
         console.error(err.message);
         res.status(500).json({message:'server error'});
