@@ -131,7 +131,7 @@ export async function bookPackage(req,res){
     try{
         const[user_id,id,email,startDate,EndDate,people,place,tripType,image_url,amount]=req.body;
         const result=await db.query("Insert into bookedpackages (user_id,package_id,people,start_date,end_date,email,place,image_url,name,amount) values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING *",[user_id,id,people,startDate,EndDate,email,place,image_url,tripType,amount]);
-        console.log('Query parameters:', { user_id, id, email, startDate, EndDate, people, place, name, image_url, amount });
+        console.log('Query parameters:', { user_id, id, email, startDate, EndDate, people, place, tripType, image_url, amount });
         if(result.rows.length>0){
             res.status(201).json(result.rows);
         }else{
